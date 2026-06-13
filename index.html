@@ -2,194 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All-in-One Static Media Toolkit</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
-    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    <title>Discord Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #202225; color: white; text-align: center; padding-top: 100px; }
+        .btn { padding: 10px 20px; background: #5865F2; color: white; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; font-weight: bold;}
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen font-sans">
+<body>
+    <div id="view">
+        <h1>Loading Portal...</h1>
+    </div>
 
-    <header class="bg-gray-800 border-b border-gray-700 py-6 text-center">
-        <h1 class="text-3xl font-bold text-teal-400">Client-Side Media Toolkit</h1>
-        <p class="text-gray-400 text-sm mt-1">100% Secure. Files never leave your browser.</p>
-    </header>
+    <script>
+        // REPLACE WITH YOUR VPS PUBLIC IP OR DOMAIN
+        const VPS_URL = "http://YOUR_VPS_IP:5000"; 
 
-    <main class="max-w-5xl mx-auto p-6 space-y-12">
+        // Check if user is already logged into this browser session
+        const username = localStorage.getItem("username");
+        const discordId = localStorage.getItem("discord_id");
+        const view = document.getElementById("view");
 
-        <section class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
-            <h2 class="text-xl font-semibold text-teal-300 mb-4 flex items-center gap-2">
-                📷 1. AI Photo Background Remover
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex flex-col justify-center items-center border-2 border-dashed border-gray-600 rounded-lg p-6 bg-gray-850">
-                    <input type="file" id="imageInput" accept="image/*" class="hidden">
-                    <label for="imageInput" class="cursor-pointer bg-teal-600 hover:bg-teal-500 text-white px-4 py-2 rounded font-medium transition">
-                        Upload Image
-                    </label>
-                    <p class="text-xs text-gray-400 mt-2">Supports PNG, JPG, WebP</p>
-                    <div id="imgStatus" class="text-sm text-yellow-400 mt-3 hidden">Processing AI Model locally... (Takes a few seconds)</div>
-                </div>
-                <div class="flex flex-col items-center justify-center bg-gray-900 rounded-lg p-4 min-h-[200px]">
-                    <span id="imgPlaceholder" class="text-gray-500 text-sm">Result Preview</span>
-                    <img id="imageResult" class="max-h-64 rounded hidden" alt="Background Removed">
-                    <a id="downloadImgBtn" class="mt-4 hidden bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded text-sm font-medium transition">Download PNG</a>
-                </div>
-            </div>
-        </section>
+        if (username) {
+            view.innerHTML = `
+                <h1>Welcome back, ${username}!</h1>
+                <p>ID: ${discordId}</p>
+                <button class="btn" onclick="logout()">Logout</button>
+            `;
+        } else {
+            view.innerHTML = `
+                <h1>Gateway Access</h1>
+                <p>Login using your Discord Account</p>
+                <button class="btn" onclick="login()">Login with Discord</button>
+            `;
+        }
 
-        <section class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
-            <h2 class="text-xl font-semibold text-teal-300 mb-4">
-                📄 2. PDF Utilities (Page Remover/Exporter)
-            </h2>
-            <div class="space-y-4">
-                <div class="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center bg-gray-850">
-                    <input type="file" id="pdfInput" accept=".pdf" class="hidden">
-                    <label for="pdfInput" class="cursor-pointer bg-teal-600 hover:bg-teal-500 text-white px-4 py-2 rounded font-medium transition">
-                        Upload PDF Document
-                    </label>
-                </div>
-                <div id="pdfActions" class="hidden bg-gray-900 p-4 rounded-lg space-y-4">
-                    <p class="text-sm text-gray-300" id="pdfInfo"></p>
-                    <div class="flex flex-wrap gap-4 items-center">
-                        <label class="text-sm text-gray-400">Remove Page Number:</label>
-                        <input type="number" id="removePageNum" min="1" value="1" class="bg-gray-700 text-white px-3 py-1 rounded w-20 border border-gray-600">
-                        <button id="processPdfBtn" class="bg-red-600 hover:bg-red-500 text-white px-4 py-1.5 rounded text-sm font-medium transition">
-                            Delete Page & Download
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
+        function login() {
+            // Ask VPS for the unique Discord login URL
+            fetch(`${VPS_URL}/api/login-url`)
+                .then(res => res.json())
+                .then(data => window.location.href = data.url);
+        }
 
-        <section class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
-            <h2 class="text-xl font-semibold text-teal-300 mb-4">
-                🎬 3. Universal Video Player
-            </h2>
-            <div class="space-y-6">
-                <div class="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center bg-gray-850">
-                    <input type="file" id="videoInput" accept="video/*" class="hidden">
-                    <label for="videoInput" class="cursor-pointer bg-teal-600 hover:bg-teal-500 text-white px-4 py-2 rounded font-medium transition">
-                        Select Video File
-                    </label>
-                    <p class="text-xs text-gray-400 mt-2">Plays browser-native files instantly.</p>
-                </div>
-                <div class="flex justify-center bg-gray-900 p-4 rounded-lg hidden" id="videoContainer">
-                    <video id="my-video" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" width="640" height="360">
-                        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video</p>
-                    </video>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <script type="module">
-        // Import local ES Module for background removal directly via CDN
-        import imglyRemoveBackground from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm';
-
-        let uploadedPdfBytes = null;
-
-        // --- 1. IMAGE LOGIC (Background Removal) ---
-        document.getElementById('imageInput').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const status = document.getElementById('imgStatus');
-            const placeholder = document.getElementById('imgPlaceholder');
-            const resultImg = document.getElementById('imageResult');
-            const dlBtn = document.getElementById('downloadImgBtn');
-
-            status.classList.remove('hidden');
-            placeholder.classList.add('hidden');
-            resultImg.classList.add('hidden');
-            dlBtn.classList.add('hidden');
-
-            try {
-                // Runs AI logic right inside the browser engine using WASM
-                const blob = await imglyRemoveBackground(file);
-                const resultUrl = URL.createObjectURL(blob);
-                
-                resultImg.src = resultUrl;
-                resultImg.classList.remove('hidden');
-                
-                dlBtn.href = resultUrl;
-                dlBtn.download = `no-bg-${file.name.split('.')[0]}.png`;
-                dlBtn.classList.remove('hidden');
-            } catch (error) {
-                console.error(error);
-                alert("Failed to process image background locally.");
-            } finally {
-                status.classList.add('hidden');
-            }
-        });
-
-        // --- 2. PDF LOGIC (Modify structures natively) ---
-        document.getElementById('pdfInput').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const arrayBuffer = await file.arrayBuffer();
-            uploadedPdfBytes = new Uint8Array(arrayBuffer);
-
-            // Load properties using pdf-lib
-            const pdfDoc = await PDFLib.PDFDocument.load(uploadedPdfBytes);
-            const pageCount = pdfDoc.getPageCount();
-
-            document.getElementById('pdfInfo').innerText = `Loaded: "${file.name}" containing ${pageCount} pages.`;
-            document.getElementById('removePageNum').max = pageCount;
-            document.getElementById('pdfActions').classList.remove('hidden');
-        });
-
-        document.getElementById('processPdfBtn').addEventListener('click', async () => {
-            if (!uploadedPdfBytes) return;
-
-            const pageIndexToRemove = parseInt(document.getElementById('removePageNum').value) - 1;
-            
-            try {
-                const pdfDoc = await PDFLib.PDFDocument.load(uploadedPdfBytes);
-                const totalPages = pdfDoc.getPageCount();
-
-                if (pageIndexToRemove < 0 || pageIndexToRemove >= totalPages) {
-                    alert("Invalid page number specified.");
-                    return;
-                }
-
-                // Modify document structures directly 
-                pdfDoc.removePage(pageIndexToRemove);
-                
-                const modifiedPdfBytes = await pdfDoc.save();
-                const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
-                const docUrl = URL.createObjectURL(blob);
-
-                // Instantly download resulting document
-                const a = document.createElement('a');
-                a.href = docUrl;
-                a.download = "edited_document.pdf";
-                a.click();
-            } catch (err) {
-                alert("Error modifying PDF structural layers.");
-                console.error(err);
-            }
-        });
-
-        // --- 3. VIDEO LOGIC (HTML5 Video Element Binding) ---
-        const player = videojs('my-video');
-
-        document.getElementById('videoInput').addEventListener('change', function(e) {
-            const file = this.files[0];
-            if (!file) return;
-
-            const fileURL = URL.createObjectURL(file);
-            document.getElementById('videoContainer').classList.remove('hidden');
-
-            // Dynamically load the client's file directly into VideoJS source wrapper
-            player.src({ type: file.type, src: fileURL });
-            player.ready(() => {
-                player.play();
-            });
-        });
+        function logout() {
+            localStorage.clear();
+            window.location.reload();
+        }
     </script>
 </body>
 </html>
