@@ -47,7 +47,7 @@
         .container {
             width: 100%;
             max-width: 440px;
-            min-height: 550px;
+            min-height: 570px;
             background: var(--card-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -60,7 +60,7 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
         }
 
         .screen {
@@ -81,7 +81,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Typography */
         .heart-icon {
             font-size: 24px;
             color: var(--accent-color);
@@ -112,12 +111,13 @@
             font-weight: 600;
         }
 
-        /* Buttons Setup */
+        /* Buttons setup */
         .btn-group {
             display: flex;
             gap: 15px;
             width: 100%;
             margin-top: 20px;
+            position: relative;
         }
 
         button {
@@ -148,46 +148,61 @@
             color: var(--primary-color);
             border: 1px solid rgba(0,0,0,0.05);
             flex: 1;
+            z-index: 10;
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        /* Screen 1 specific playfulness */
-        #btn-no {
-            position: relative;
-        }
-
-        /* Screen 2: Calendar layout */
+        /* Dynamic Calendar Engine */
         .calendar-container {
             width: 100%;
             margin-bottom: 20px;
         }
 
+        .calendar-header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 0 5px;
+        }
+
         .calendar-month {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 600;
             letter-spacing: 1px;
-            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .nav-arrow {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(74, 40, 64, 0.1);
         }
 
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
+            gap: 4px;
         }
 
         .weekday {
             font-size: 0.75rem;
             color: var(--secondary-color);
             font-weight: 600;
-            padding: 8px 0;
+            padding: 6px 0;
         }
 
         .day {
             font-size: 0.85rem;
-            padding: 10px 0;
+            padding: 8px 0;
             border-radius: 50%;
             cursor: pointer;
             user-select: none;
@@ -208,7 +223,11 @@
             font-weight: 600;
         }
 
-        /* Screen 3: Time Selection */
+        .day.empty {
+            cursor: default;
+        }
+
+        /* Time Selection Elements */
         .time-list {
             display: flex;
             flex-direction: column;
@@ -249,7 +268,7 @@
             opacity: 0.8;
         }
 
-        /* Screen 4: Food Grid */
+        /* Food Grid Elements */
         .food-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -299,7 +318,7 @@
             min-height: 18px;
         }
 
-        /* Screen 5: Final Summary Layout */
+        /* Summary Panel layout */
         .summary-box {
             background: rgba(255, 255, 255, 0.4);
             border-radius: 20px;
@@ -350,7 +369,7 @@
             <div class="heart-icon">❤️</div>
             <h1>Will you go on a date with me?</h1>
             <p class="subtitle">A question worth asking</p>
-            <div class="btn-group">
+            <div class="btn-group" id="proposal-btn-group">
                 <button class="btn-primary" id="btn-yes">Yes</button>
                 <button class="btn-secondary" id="btn-no">No</button>
             </div>
@@ -362,23 +381,13 @@
             <p class="subtitle">Pick a date</p>
             
             <div class="calendar-container">
-                <div class="calendar-month">JUNE 2026</div>
-                <div class="calendar-grid">
-                    <div class="weekday">Su</div><div class="weekday">Mo</div><div class="weekday">Tu</div>
-                    <div class="weekday">We</div><div class="weekday">Th</div><div class="weekday">Fr</div><div class="weekday">Sa</div>
-                    
-                    <div class="day empty"></div>
-                    <div class="day" data-day="1">1</div><div class="day" data-day="2">2</div><div class="day" data-day="3">3</div>
-                    <div class="day" data-day="4">4</div><div class="day" data-day="5">5</div><div class="day" data-day="6">6</div>
-                    <div class="day" data-day="7">7</div><div class="day" data-day="8">8</div><div class="day" data-day="9">9</div>
-                    <div class="day" data-day="10">10</div><div class="day" data-day="11">11</div><div class="day" data-day="12">12</div>
-                    <div class="day" data-day="13">13</div><div class="day" data-day="14">14</div><div class="day" data-day="15">15</div>
-                    <div class="day" data-day="16">16</div><div class="day" data-day="17">17</div><div class="day" data-day="18">18</div>
-                    <div class="day" data-day="19">19</div><div class="day" data-day="20">20</div><div class="day" data-day="21">21</div>
-                    <div class="day" data-day="22">22</div><div class="day" data-day="23">23</div><div class="day" data-day="24">24</div>
-                    <div class="day" data-day="25">25</div><div class="day" data-day="26">26</div><div class="day" data-day="27">27</div>
-                    <div class="day" data-day="28">28</div><div class="day" data-day="29">29</div><div class="day" data-day="30">30</div>
+                <div class="calendar-header-nav">
+                    <button class="nav-arrow" id="prev-month">&lt;</button>
+                    <div class="calendar-month" id="calendar-month-year">JUNE 2026</div>
+                    <button class="nav-arrow" id="next-month">&gt;</button>
                 </div>
+                <div class="calendar-grid" id="calendar-days-grid">
+                    </div>
             </div>
             
             <button class="btn-primary" id="next-to-time" style="width: 100%; display: none;">Continue</button>
@@ -461,18 +470,27 @@
             </div>
 
             <p class="love-quote">"Every great love story has a first evening. This is ours."</p>
-            <button class="btn-primary" id="btn-calendar" style="width: 100%;">Add to Calendar</button>
+            <button class="btn-primary" id="btn-calendar" style="width: 100%;">Add to Google Calendar</button>
         </div>
 
     </div>
 
     <script>
-        // App State
-        let selectedDate = "20";
+        // Global State Parameters
+        let selectedYear = 2026;
+        let selectedMonth = 5; // June (0-Indexed)
+        let selectedDay = "";
         let selectedTime = "";
         let selectedFoods = [];
 
-        // Synthesize dynamic clicking sounds using Web Audio API
+        // UI rendering state pointers
+        let currentRenderYear = 2026;
+        let currentRenderMonth = 5;
+
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+        // Dynamic sound synth mapping via standard browser AudioContext pipeline
         function playClickSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -480,9 +498,8 @@
                 const gainNode = audioCtx.createGain();
                 
                 oscillator.type = 'sine';
-                // Fast linear ramp up for clean click/pop sound architecture
-                oscillator.frequency.setValueAtTime(400, audioCtx.currentTime); 
-                oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.04);
+                oscillator.frequency.setValueAtTime(450, audioCtx.currentTime); 
+                oscillator.frequency.exponentialRampToValueAtTime(1300, audioCtx.currentTime + 0.04);
                 
                 gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
@@ -493,56 +510,138 @@
                 oscillator.start();
                 oscillator.stop(audioCtx.currentTime + 0.06);
             } catch (e) {
-                console.log("Audio not supported or waiting for user interaction gesture.");
+                console.log("Audio contextual interface waiting for manual click tracking authorization.");
             }
         }
 
-        // Screen Navigation Function
         function navigateTo(currentId, nextId) {
             document.getElementById(currentId).classList.remove('active');
             document.getElementById(nextId).classList.add('active');
         }
 
-        // --- SCREEN 1: PROPOSAL EVENTS ---
+        // --- SCREEN 1: EVASIVE RUNAWAY ENGINE FOR 'NO' BUTTON ---
+        const noBtn = document.getElementById('btn-no');
+        
+        function flyToNewLocation() {
+            playClickSound();
+            const container = document.querySelector('.container');
+            const containerRect = container.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+            
+            // Calculate radical new target coordinate structures safely within bounds
+            const maxX = containerRect.width - btnRect.width - 40;
+            const maxY = containerRect.height - btnRect.height - 40;
+            
+            const randomX = Math.floor(Math.random() * maxX) - (containerRect.width / 2 - btnRect.width);
+            const randomY = Math.floor(Math.random() * maxY) - (containerRect.height / 2 - btnRect.height);
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        noBtn.addEventListener('mouseover', flyToNewLocation);
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            flyToNewLocation();
+        });
+
         document.getElementById('btn-yes').addEventListener('click', () => {
             playClickSound();
+            // Reset 'No' button if needed later
+            noBtn.style.position = 'static';
+            noBtn.style.transform = 'none';
+            renderCalendarGrid();
             navigateTo('screen-proposal', 'screen-date');
         });
 
-        // Playful runaway mechanism for 'No' button
-        const noBtn = document.getElementById('btn-no');
-        noBtn.addEventListener('mouseover', () => {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) - (window.innerWidth/2 - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) - (window.innerHeight/2 - noBtn.offsetHeight);
-            noBtn.style.transform = `translate(${x/3}px, ${y/3}px)`;
-        });
-        noBtn.addEventListener('click', () => {
+        // --- SCREEN 2: FUNCTIONAL CALENDAR ENGINE ---
+        function renderCalendarGrid() {
+            const grid = document.getElementById('calendar-days-grid');
+            const label = document.getElementById('calendar-month-year');
+            
+            grid.innerHTML = '';
+            label.innerText = `${monthNames[currentRenderMonth]} ${currentRenderYear}`;
+
+            // Weekday Headers
+            const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+            daysOfWeek.forEach(d => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'weekday';
+                dayHeader.innerText = d;
+                grid.appendChild(dayHeader);
+            });
+
+            const firstDayIndex = new Date(currentRenderYear, currentRenderMonth, 1).getDay();
+            const totalDaysInMonth = new Date(currentRenderYear, currentRenderMonth + 1, 0).getDate();
+
+            // Insert empty cells before day 1
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'day empty';
+                grid.appendChild(emptyCell);
+            }
+
+            // Populate clickable calendar days
+            for (let dayNum = 1; dayNum <= totalDaysInMonth; dayNum++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'day';
+                dayCell.innerText = dayNum;
+
+                // Retain selected active class if changing months and back again
+                if (selectedDay == dayNum && selectedMonth === currentRenderMonth && selectedYear === currentRenderYear) {
+                    dayCell.classList.add('selected');
+                }
+
+                dayCell.addEventListener('click', () => {
+                    playClickSound();
+                    
+                    // Unset old selection
+                    const currentSelected = grid.querySelector('.day.selected');
+                    if (currentSelected) currentSelected.classList.remove('selected');
+                    
+                    dayCell.classList.add('selected');
+                    
+                    selectedDay = dayNum;
+                    selectedMonth = currentRenderMonth;
+                    selectedYear = currentRenderYear;
+
+                    document.getElementById('next-to-time').style.display = 'block';
+                    
+                    setTimeout(() => {
+                        navigateTo('screen-date', 'screen-time');
+                    }, 350);
+                });
+
+                grid.appendChild(dayCell);
+            }
+        }
+
+        document.getElementById('prev-month').addEventListener('click', () => {
             playClickSound();
-            alert("Nice try! Try hitting 'Yes' instead 😉");
+            currentRenderMonth--;
+            if (currentRenderMonth < 0) {
+                currentRenderMonth = 11;
+                currentRenderYear--;
+            }
+            renderCalendarGrid();
         });
 
-        // --- SCREEN 2: CALENDAR EVENTS ---
-        const days = document.querySelectorAll('.day:not(.empty)');
-        days.forEach(day => {
-            day.addEventListener('click', () => {
-                playClickSound();
-                days.forEach(d => d.classList.remove('selected'));
-                day.classList.add('selected');
-                selectedDate = day.getAttribute('data-day');
-                document.getElementById('next-to-time').style.display = 'block';
-                
-                // Advance automatically after selection like standard premium components
-                setTimeout(() => {
-                    navigateTo('screen-date', 'screen-time');
-                }, 350);
-            });
+        document.getElementById('next-month').addEventListener('click', () => {
+            playClickSound();
+            currentRenderMonth++;
+            if (currentRenderMonth > 11) {
+                currentRenderMonth = 0;
+                currentRenderYear++;
+            }
+            renderCalendarGrid();
         });
+
         document.getElementById('next-to-time').addEventListener('click', () => {
             playClickSound();
             navigateTo('screen-date', 'screen-time');
         });
 
-        // --- SCREEN 3: TIME OPTIONS EVENTS ---
+        // --- SCREEN 3: TIME PICKER ---
         const timeOptions = document.querySelectorAll('.time-option');
         timeOptions.forEach(option => {
             option.addEventListener('click', () => {
@@ -557,7 +656,7 @@
             });
         });
 
-        // --- SCREEN 4: FOOD GRIDS EVENTS ---
+        // --- SCREEN 4: FOOD CRAVINGS ---
         const foodCards = document.querySelectorAll('.food-card');
         const cravingSummary = document.getElementById('craving-summary');
         
@@ -566,7 +665,7 @@
                 playClickSound();
                 const food = card.getAttribute('data-food');
                 
-                if(selectedFoods.includes(food)) {
+                if (selectedFoods.includes(food)) {
                     selectedFoods = selectedFoods.filter(item => item !== food);
                     card.classList.remove('selected');
                 } else {
@@ -574,7 +673,7 @@
                     card.classList.add('selected');
                 }
 
-                if(selectedFoods.length > 0) {
+                if (selectedFoods.length > 0) {
                     cravingSummary.innerText = selectedFoods.join(' + ') + " - bold choice!";
                 } else {
                     cravingSummary.innerText = "select what you're craving";
@@ -584,27 +683,52 @@
 
         document.getElementById('btn-finish').addEventListener('click', () => {
             playClickSound();
-            if(selectedFoods.length === 0) {
-                alert("Please select at least one thing you're craving! 🍕");
+            if (selectedFoods.length === 0) {
+                alert("Please pick at least one thing you're craving! 🍕");
                 return;
             }
 
-            // Build dynamic display elements for the summary page
-            // Calculating standard day name layout for June 2026
-            const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            const dateObj = new Date(2026, 5, parseInt(selectedDate)); // June is month index 5
-            const dayOfWeek = dayNames[dateObj.getDay()];
+            const chosenDate = new Date(selectedYear, selectedMonth, selectedDay);
+            const dayName = dayNames[chosenDate.getDay()];
+            const monthName = monthNames[selectedMonth];
 
-            document.getElementById('final-date').innerText = `${dayOfWeek}, June ${selectedDate} @ ${selectedTime}`;
+            document.getElementById('final-date').innerText = `${dayName}, ${monthName} ${selectedDay}, ${selectedYear} @ ${selectedTime}`;
             document.getElementById('final-food').innerText = selectedFoods.join(' & ');
 
             navigateTo('screen-food', 'screen-final');
         });
 
-        // --- SCREEN 5: CALENDAR LINK OUT ---
+        // --- SCREEN 5: GOOGLE CALENDAR DYNAMIC EVENT LINK GENERATOR ---
         document.getElementById('btn-calendar').addEventListener('click', () => {
             playClickSound();
-            alert("📅 Date added successfully to our hearts calendar!");
+
+            // Extract numeric execution hours
+            let hours = 19; 
+            let minutes = 0;
+            if (selectedTime === "8:30 PM") { hours = 20; minutes = 30; }
+            if (selectedTime === "10:00 PM") { hours = 22; minutes = 0; }
+
+            // Build Date tracking matrices
+            const eventStartDate = new Date(selectedYear, selectedMonth, selectedDay, hours, minutes);
+            const eventEndDate = new Date(eventStartDate.getTime() + (2.5 * 60 * 60 * 1000)); // Standard 2.5 hour date template allocation
+
+            const pad = (num) => String(num).padStart(2, '0');
+            
+            // Format out standard ISO structures for Google URL processing (YYYYMMDDTHHMMSS)
+            const formatGCalDate = (d) => {
+                return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+            };
+
+            const timeString = `${formatGCalDate(eventStartDate)}/${formatGCalDate(eventEndDate)}`;
+            
+            const eventTitle = encodeURIComponent("Our Special Date! ❤️");
+            const eventDetails = encodeURIComponent(`We are officially going out! ✨\n\n🍽️ What we're eating: ${selectedFoods.join(', ')}`);
+            
+            // Generate valid target address
+            const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${eventTitle}&dates=${timeString}&details=${eventDetails}&sf=true&output=xml`;
+            
+            // Open in external window layer
+            window.open(googleCalendarUrl, '_blank');
         });
     </script>
 </body>
